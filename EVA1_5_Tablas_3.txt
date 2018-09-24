@@ -1,0 +1,175 @@
+MySQL Shell 8.0.12
+
+Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+
+
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+
+ MySQL  SQL > \connect -c root@localhost
+The -c option is deprecated, please use --mysql or -mc instead
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': ****
+Save password for 'root@localhost:3306'? [Y]es/[N]o/Ne[v]er (default No): y
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 4
+Server version: 5.5.20 MySQL Community Server (GPL)
+No default schema selected; type \use <schema> to set one.
+
+ MySQL  localhost:3306  SQL > \use evaluacion_1
+Default schema set to `evaluacion_1`.
+Fetching table and column names from `evaluacion_1` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:3306  evaluacion_1  SQL > show tables
+                                        ... ;
++------------------------+
+| Tables_in_evaluacion_1 |
++------------------------+
+| carrera                |
+| estudiante             |
+| horario                |
+| materias               |
+| nueva_carrera          |
+| nueva_carrerita        |
+| paises                 |
+| personal               |
+| personal2              |
++------------------------+
+9 rows in set (0.0015 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > desc paises;
++------------+----------------------------------------------------+------+-----+---------+----------------+
+| Field      | Type                                               | Null | Key | Default | Extra          |
++------------+----------------------------------------------------+------+-----+---------+----------------+
+| clave      | int(11)                                            | NO   | PRI | NULL    | auto_increment |
+| nombre     | varchar(50)                                        | NO   |     | NULL    |                |
+| poblacion  | float                                              | YES  |     | 1       |                |
+| continente | enum('AFRICA','AMERICA','ASIA','OCEANIA','EUROPA') | YES  |     | NULL    |                |
++------------+----------------------------------------------------+------+-----+---------+----------------+
+4 rows in set (0.0041 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > create table paisesnew(
+                                        ... clave int not null primary key auto_increment,
+                                        ... nombre varchar(50) not null unique,
+                                        ... poblacion int default 1,
+                                        ... continente enum('AMERICA','ASIA','AFRICA','OCEANIA','EUROPA'));
+Query OK, 0 rows affected (0.0766 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > alter table paises change nombre nombre varchar(50) not null unique;
+Query OK, 0 rows affected (0.1527 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+
+ MySQL  localhost:3306  evaluacion_1  SQL >
+ MySQL  localhost:3306  evaluacion_1  SQL > desc paises;
++------------+----------------------------------------------------+------+-----+---------+----------------+
+| Field      | Type                                               | Null | Key | Default | Extra          |
++------------+----------------------------------------------------+------+-----+---------+----------------+
+| clave      | int(11)                                            | NO   | PRI | NULL    | auto_increment |
+| nombre     | varchar(50)                                        | NO   | UNI | NULL    |                |
+| poblacion  | float                                              | YES  |     | 1       |                |
+| continente | enum('AFRICA','AMERICA','ASIA','OCEANIA','EUROPA') | YES  |     | NULL    |                |
++------------+----------------------------------------------------+------+-----+---------+----------------+
+4 rows in set (0.0043 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > insert into paises(nombre, poblacion,continente) values ('Mexico',150000000,'AMERICA');
+Query OK, 1 row affected (0.0502 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > select  * from paises;
++-------+--------+-----------+------------+
+| clave | nombre | poblacion | continente |
++-------+--------+-----------+------------+
+|     1 | Mexico | 150000000 | AMERICA    |
++-------+--------+-----------+------------+
+1 row in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > desc personal2;
++--------------+----------------------------------------------------------+------+-----+---------+----------------+
+| Field        | Type                                                     | Null | Key | Default | Extra          |
++--------------+----------------------------------------------------------+------+-----+---------+----------------+
+| clave        | int(11)                                                  | NO   | PRI | NULL    | auto_increment |
+| nombre       | varchar(50)                                              | NO   |     | NULL    |                |
+| apellido     | varchar(50)                                              | NO   |     | NULL    |                |
+| departamento | enum('SISTEMAS','CONTABILIDAD','INHUMANOS','PRODUCCION') | YES  |     | NULL    |                |
+| salario      | float                                                    | YES  |     | 15000   |                |
++--------------+----------------------------------------------------------+------+-----+---------+----------------+
+5 rows in set (0.0043 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > select * from personal2;
++-------+--------+--------------+--------------+---------+
+| clave | nombre | apellido     | departamento | salario |
++-------+--------+--------------+--------------+---------+
+|     1 | Ruben  | Hernandez    | NULL         |   15000 |
+|     2 | Juan   | Perez Jolote | SISTEMAS     |   15000 |
+|     3 | x      | y            | INHUMANOS    |    5000 |
++-------+--------+--------------+--------------+---------+
+3 rows in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > delete from personal2;
+Query OK, 3 rows affected (0.0653 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > select * from personal2;
+Empty set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > alter table personal2 add RFC varchar(50) not null unique;
+Query OK, 0 rows affected (0.2439 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+
+ MySQL  localhost:3306  evaluacion_1  SQL > desc personal2;
++--------------+----------------------------------------------------------+------+-----+---------+----------------+
+| Field        | Type                                                     | Null | Key | Default | Extra          |
++--------------+----------------------------------------------------------+------+-----+---------+----------------+
+| clave        | int(11)                                                  | NO   | PRI | NULL    | auto_increment |
+| nombre       | varchar(50)                                              | NO   |     | NULL    |                |
+| apellido     | varchar(50)                                              | NO   |     | NULL    |                |
+| departamento | enum('SISTEMAS','CONTABILIDAD','INHUMANOS','PRODUCCION') | YES  |     | NULL    |                |
+| salario      | float                                                    | YES  |     | 15000   |                |
+| RFC          | varchar(50)                                              | NO   | UNI | NULL    |                |
++--------------+----------------------------------------------------------+------+-----+---------+----------------+
+6 rows in set (0.0046 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > insert into personal2 (nombre,apellido,departamento,salario,rfc) values ('Cinthia','Vazquez','SISTEMAS',1200,'VALC971009MCHZRN05');
+Query OK, 1 row affected (0.0473 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > select * from personal2;
++-------+---------+----------+--------------+---------+--------------------+
+| clave | nombre  | apellido | departamento | salario | RFC                |
++-------+---------+----------+--------------+---------+--------------------+
+|     4 | Cinthia | Vazquez  | SISTEMAS     |    1200 | VALC971009MCHZRN05 |
++-------+---------+----------+--------------+---------+--------------------+
+1 row in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > select * from personal2;
++-------+---------+----------+--------------+---------+--------------------+
+| clave | nombre  | apellido | departamento | salario | RFC                |
++-------+---------+----------+--------------+---------+--------------------+
+|     4 | Cinthia | Vazquez  | SISTEMAS     |    1200 | VALC971009MCHZRN05 |
++-------+---------+----------+--------------+---------+--------------------+
+1 row in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > create table jobs(
+                                        ... job_id int not null primary key auto_increment,
+                                        ... job_title varchar(50) default ' ',
+                                        ... min_salary int default 2500,
+                                        ... max_salary int default 8000);
+Query OK, 0 rows affected (0.1267 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > desc jobs;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| job_id     | int(11)     | NO   | PRI | NULL    | auto_increment |
+| job_title  | varchar(50) | YES  |     |         |                |
+| min_salary | int(11)     | YES  |     | 2500    |                |
+| max_salary | int(11)     | YES  |     | 8000    |                |
++------------+-------------+------+-----+---------+----------------+
+4 rows in set (0.0046 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL >
